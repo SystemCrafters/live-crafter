@@ -1,0 +1,13 @@
+#+title: live-crafter.el
+
+This package provides automation for things I commonly do in videos and streams for the [[https://youtube.com/SystemCrafters][System Crafters YouTube channel]]:
+
+- Starting video recording through OBS
+- Starting background music playback and controlling fades with mpv.el
+- Capturing timestamps for things that happen in the video like slide changes
+
+it's probably a little too hard-coded to be useful to others at the moment but I might generalize it in the future if there's enough interest from others.
+
+* License
+
+This project is licensed under the [[file:LICENSE][GNU General Public License v3]].
