@@ -57,5 +57,45 @@
                                  (or duration live-crafter-music-fade-default-duration)
                                  callback))
 
+(defun live-crafter-start-recording ()
+  (interactive)
+  (obs-websocket-send "SetCurrentScene" :scene-name "Logo Screen")
+  (run-at-time 1 nil (lambda ()
+                       (obs-websocket-send "StartRecording")
+                       (live-crafter-timestamps-start)
+                       (live-crafter-add-timestamp "Intro")
+                       (live-crafter-start-music))))
+
+(defun live-crafter-intro-to-screen ()
+  (interactive)
+  (live-crafter-fade-music 22 2 (lambda ()
+                                  (obs-websocket-send "SetCurrentScene" :scene-name "Screen"))))
+
+(defvar live-crafter--timestamp-start-time nil)
+(defvar live-crafter--timestamp-buffer nil)
+
+(defun live-crafter-timestamps-start ()
+  (setq live-crafter--timestamp-buffer (find-file-noselect "~/Notes/Streams/Timestamps.org"))
+  (setq live-crafter--timestamp-start-time (float-time))
+  (let ((inhibit-message t))
+    (with-current-buffer live-crafter--timestamp-buffer
+      (delete-region (point-min) (point-max))
+      (save-buffer))))
+
+(defun live-crafter--format-timestamp (title)
+  (format "- %s %s"
+          (format-seconds "%h:%z%.2m:%.2s" (- (float-time)
+                                            live-crafter--timestamp-start-time))
+          title))
+
+(defun live-crafter-add-timestamp (title)
+  (when live-crafter--timestamp-start-time
+    (let ((inhibit-message t))
+      (with-current-buffer live-crafter--timestamp-buffer
+        (goto-char (point-max))
+        (insert (live-crafter--format-timestamp title))
+        (newline)
+        (save-buffer)))))
+
 ;; TODO: Change scene after finishing fade
-;; (live-crafter-fade-music 35.0 2 (lambda () (message "Fade is done!")))
+;; (live-crafter-fade-music 22.0 2 (lambda () (message "Fade is done!")))
