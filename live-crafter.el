@@ -283,11 +283,14 @@
 (defvar live-crafter-after-stream-start-hook nil
   "A hook that runs just after the stream is started.")
 
-(defun live-crafter-start-stream ()
+(defun live-crafter-start-streaming ()
   (interactive)
   (obs-websocket-send "SetCurrentScene" :scene-name "Logo Screen")
-  (obs-websocket-send "StartStreaming")
-  (live-crafter-start-music))
+  (run-at-time 1 nil (lambda ()
+                       (obs-websocket-send "StartStreaming")
+                       (live-crafter-timestamps-start)
+                       (live-crafter-add-timestamp "Intro")
+                       (live-crafter-start-music))))
 
 (defun live-crafter-start-recording ()
   (interactive)
