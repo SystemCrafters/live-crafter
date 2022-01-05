@@ -236,7 +236,7 @@
 (defun live-crafter-start-music ()
   (interactive)
   (setq live-crafter-music-current-volume live-crafter-music-start-volume)
-  (mpv-start "--playlist=/home/daviwil/Notes/Streams/playlist.txt"
+  (mpv-start "--playlist=/home/daviwil/Notes/Shows/SystemCrafters/playlist.txt"
              "--loop-playlist"
              "--no-resume-playback"
              (format "--volume=%s" live-crafter-music-current-volume)))
